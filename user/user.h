@@ -45,3 +45,5 @@ void free(void*);
 // Lab 1
 int hello(void);
 int trace(int);
+struct sysinfo;
+int sysinfo(struct sysinfo *);

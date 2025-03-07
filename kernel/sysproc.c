@@ -5,7 +5,7 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
-
+#include "sysinfo.h"
 
 uint64
 sys_exit(void)
@@ -104,5 +104,26 @@ uint64 sys_trace(void)
     int mask;
     argint(0, &mask); // Lấy mask từ user space (0 = tham số đầu của trace(int mask))
     myproc()->trace_mask = mask;
+    return 0;
+}
+extern uint64 count_free_mem(void);
+extern uint64 count_procs(void);
+extern uint64 count_open_files(void);
+
+uint64 sys_sysinfo(void) {
+    struct sysinfo info;
+    uint64 addr;
+
+    // Lấy địa chỉ struct sysinfo từ user space
+    argaddr(0, &addr);
+
+    info.freemem = count_free_mem();
+    info.nproc = count_procs();
+    info.nopenfiles = count_open_files();
+
+    // Sao chép struct sysinfo về user space
+    if (copyout(myproc()->pagetable, addr, (char*)&info, sizeof(info)) < 0) {
+        return -1;
+    }
     return 0;
 }

@@ -22,7 +22,7 @@ struct {
 void
 fileinit(void)
 {
-  initlock(&ftable.lock, "ftable");
+  initlock(&(ftable.lock), "ftable");
 }
 
 // Allocate a file structure.
@@ -180,3 +180,17 @@ filewrite(struct file *f, uint64 addr, int n)
   return ret;
 }
 
+
+uint64 count_open_files(void) {
+    struct file *f;
+    uint64 count = 0;
+  
+    acquire(&(ftable.lock));
+    for (f = ftable.file; f < &(ftable.file[NFILE]); f++) {
+        if (f->ref > 0) {
+            count++;
+        }
+    }
+    release(&(ftable.lock));
+    return count;
+}

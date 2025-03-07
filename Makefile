@@ -197,7 +197,8 @@ UPROGS=\
 	$U/_sleep\
 	$U/_testhello\
 	$U/_trace\
-
+	$U/_sysinfotest \
+	
 ifeq ($(LAB),syscall)
 UPROGS += \
 	$U/_attack\
