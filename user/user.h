@@ -42,4 +42,6 @@ void *memcpy(void *, const void *, unsigned int);
 void* malloc(unsigned int);
 void free(void*);
 
+// Lab 1
 int hello(void);
+int trace(int);

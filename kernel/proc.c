@@ -82,10 +82,11 @@ mycpu(void)
 struct proc*
 myproc(void)
 {
-  push_off();
-  struct cpu *c = mycpu();
+  push_off(); //Tắt gián đoạn (interrupts)
+  struct cpu *c = mycpu(); //lấy con trỏ đến CPU hiện tại
+  // Mỗi CPU có thể chạy một tiến trình tại một thời điểm, và biến c->proc trỏ đến tiến trình đó.
   struct proc *p = c->proc;
-  pop_off();
+  pop_off(); // Bật lại gián đoạn (interrupts)
   return p;
 }
 
@@ -321,7 +322,7 @@ fork(void)
   acquire(&np->lock);
   np->state = RUNNABLE;
   release(&np->lock);
-
+  np->trace_mask = p->trace_mask;
   return pid;
 }
 

@@ -95,6 +95,14 @@ sys_uptime(void)
 
 
 uint64 sys_hello(void) {
- printf("Hello, world!\n");
- return 0;
+  printf("Hello, world!\n");
+  return 0;
+}
+
+uint64 sys_trace(void)
+{
+    int mask;
+    argint(0, &mask); // Lấy mask từ user space (0 = tham số đầu của trace(int mask))
+    myproc()->trace_mask = mask;
+    return 0;
 }
