@@ -95,9 +95,11 @@ uint64 count_free_mem(void) {
     struct run *r;
     uint64 free_bytes = 0;
   
-    for (r = kmem.freelist; r; r = r->next) {
+    acquire(&kmem.lock);
+    for (r = kmem.freelist; r; r = r->next)
         free_bytes += PGSIZE;
-    }
+    release(&kmem.lock);
+    
     return free_bytes;
 }
 
